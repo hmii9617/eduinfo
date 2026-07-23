@@ -2,91 +2,278 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>교육 참석자 안내</title>
+
+  <!-- 모바일 화면 너비에 맞춰 표시 -->
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1, maximum-scale=5, user-scalable=yes"
+  >
+
+  <title>주차 및 건물 출입 안내</title>
 
   <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    html,
     body {
       margin: 0;
-      padding: 20px 12px;
-      font-family: sans-serif;
+      min-height: 100%;
+      font-family:
+        -apple-system,
+        BlinkMacSystemFont,
+        "Apple SD Gothic Neo",
+        "Noto Sans KR",
+        "Malgun Gothic",
+        sans-serif;
+      background: #f3f4f6;
+      color: #222;
+    }
+
+    body {
+      padding-bottom: 92px;
+    }
+
+    /* 상단 영역 */
+    .header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      padding: 15px 16px 13px;
       text-align: center;
-      background: #f5f5f5;
+      background: rgba(255, 255, 255, 0.97);
+      border-bottom: 1px solid #dddddd;
     }
 
-    h2 {
-      margin: 0 0 16px;
+    .header h1 {
+      margin: 0;
+      font-size: 21px;
+      line-height: 1.35;
+      letter-spacing: -0.5px;
     }
 
-    .page-image {
-      display: none;
+    .header p {
+      margin: 6px 0 0;
+      font-size: 14px;
+      line-height: 1.45;
+      color: #555555;
+    }
+
+    /* 안내문 영역 */
+    .content {
       width: 100%;
-      max-width: 900px;
-      height: auto;
+      max-width: 920px;
       margin: 0 auto;
-      background: white;
+      padding: 12px 8px 28px;
     }
 
-    .page-image.active {
+    .page {
+      display: none;
+    }
+
+    .page.active {
       display: block;
     }
 
-    .page-number {
-      margin: 14px 0 10px;
-      font-weight: bold;
+    .guide-image {
+      display: block;
+      width: 100%;
+      height: auto;
+      margin: 0 auto;
+      background: white;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.12);
     }
 
-    .buttons {
-      display: flex;
-      justify-content: center;
-      gap: 10px;
+    /* 이미지 확대 안내 */
+    .zoom-guide {
+      margin: 10px 0 0;
+      text-align: center;
+      font-size: 13px;
+      color: #666666;
+    }
+
+    /* 문의 문구 */
+    .contact-box {
+      margin: 18px 4px 0;
+      padding: 15px 14px;
+      text-align: center;
+      background: white;
+      border: 1px solid #dddddd;
+      border-radius: 10px;
+      font-size: 14px;
+      line-height: 1.6;
+      color: #333333;
+    }
+
+    .contact-box strong {
+      display: block;
+      margin-bottom: 2px;
+      font-size: 15px;
+    }
+
+    /* 하단 버튼 */
+    .navigation {
+      position: fixed;
+      left: 0;
+      bottom: 0;
+      z-index: 200;
+      width: 100%;
+      padding:
+        10px
+        max(12px, env(safe-area-inset-right))
+        calc(10px + env(safe-area-inset-bottom))
+        max(12px, env(safe-area-inset-left));
+      background: rgba(255, 255, 255, 0.98);
+      border-top: 1px solid #d9d9d9;
+      box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.06);
+    }
+
+    .navigation-inner {
+      display: grid;
+      grid-template-columns: 1fr 76px 1fr;
+      align-items: center;
+      gap: 8px;
+      width: 100%;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    .page-number {
+      text-align: center;
+      font-size: 16px;
+      font-weight: 700;
+      white-space: nowrap;
     }
 
     button {
-      min-width: 110px;
-      padding: 12px 18px;
+      min-height: 48px;
+      padding: 10px 12px;
       border: 0;
-      border-radius: 8px;
+      border-radius: 9px;
+      background: #1f4e79;
+      color: white;
+      font-family: inherit;
       font-size: 16px;
+      font-weight: 700;
       cursor: pointer;
+      touch-action: manipulation;
     }
 
     button:disabled {
-      opacity: 0.4;
+      background: #e4e6e9;
+      color: #9a9a9a;
       cursor: default;
+    }
+
+    /* 화면이 아주 작은 휴대폰일 때 */
+    @media (max-width: 360px) {
+      .header h1 {
+        font-size: 19px;
+      }
+
+      .header p {
+        font-size: 13px;
+      }
+
+      .navigation-inner {
+        grid-template-columns: 1fr 62px 1fr;
+      }
+
+      button {
+        padding: 9px 7px;
+        font-size: 15px;
+      }
+
+      .page-number {
+        font-size: 14px;
+      }
+    }
+
+    /* PC에서 이미지가 지나치게 커지지 않게 */
+    @media (min-width: 768px) {
+      .content {
+        padding: 20px 20px 35px;
+      }
+
+      .guide-image {
+        border-radius: 4px;
+      }
     }
   </style>
 </head>
 
 <body>
-  <h2>주차 및 건물 출입 안내</h2>
 
-  <img
-    class="page-image active"
-    src="주차 및 건물 출입 안내001.jpg"
-    alt="주차 및 건물 출입 안내 1페이지"
-  >
+  <header class="header">
+    <h1>주차 및 건물 출입 안내</h1>
+    <p>교육 참석 전 아래 안내사항을 반드시 확인해 주세요.</p>
+  </header>
 
-  <img
-    class="page-image"
-    src="주차 및 건물 출입 안내002.jpg"
-    alt="주차 및 건물 출입 안내 2페이지"
-  >
+  <main class="content">
 
-  <div class="page-number">
-    <span id="currentPage">1</span> / 2페이지
-  </div>
+    <section class="page active">
+      <img
+        class="guide-image"
+        src="주차 및 건물 출입 안내001.jpg"
+        alt="주차 및 건물 출입 안내 1페이지"
+      >
+    </section>
 
-  <div class="buttons">
-    <button id="prevButton" onclick="changePage(-1)">이전 페이지</button>
-    <button id="nextButton" onclick="changePage(1)">다음 페이지</button>
-  </div>
+    <section class="page">
+      <img
+        class="guide-image"
+        src="주차 및 건물 출입 안내002.jpg"
+        alt="주차 및 건물 출입 안내 2페이지"
+      >
+    </section>
+
+    <p class="zoom-guide">
+      글씨가 작을 경우 화면을 확대하여 확인해 주세요.
+    </p>
+
+    <div class="contact-box">
+      <strong>문의사항 안내</strong>
+      문의사항은 신청 페이지에 기재된 담당자에게 연락 바랍니다.
+    </div>
+
+  </main>
+
+  <nav class="navigation" aria-label="페이지 이동">
+    <div class="navigation-inner">
+
+      <button
+        id="prevButton"
+        type="button"
+        onclick="changePage(-1)"
+      >
+        ← 이전
+      </button>
+
+      <div
+        id="pageNumber"
+        class="page-number"
+        aria-live="polite"
+      >
+        1 / 2
+      </div>
+
+      <button
+        id="nextButton"
+        type="button"
+        onclick="changePage(1)"
+      >
+        다음 →
+      </button>
+
+    </div>
+  </nav>
 
   <script>
-    const pages = document.querySelectorAll(".page-image");
-    const currentPageText = document.getElementById("currentPage");
+    const pages = document.querySelectorAll(".page");
     const prevButton = document.getElementById("prevButton");
     const nextButton = document.getElementById("nextButton");
+    const pageNumber = document.getElementById("pageNumber");
 
     let currentPage = 0;
 
@@ -95,18 +282,53 @@
         page.classList.toggle("active", index === currentPage);
       });
 
-      currentPageText.textContent = currentPage + 1;
+      pageNumber.textContent =
+        `${currentPage + 1} / ${pages.length}`;
+
       prevButton.disabled = currentPage === 0;
       nextButton.disabled = currentPage === pages.length - 1;
+
+      window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+      });
     }
 
     function changePage(direction) {
-      currentPage += direction;
+      const newPage = currentPage + direction;
+
+      if (newPage < 0 || newPage >= pages.length) {
+        return;
+      }
+
+      currentPage = newPage;
       showPage();
-      window.scrollTo({ top: 0, behavior: "smooth" });
     }
+
+    /* 휴대폰 좌우 스와이프로 페이지 이동 */
+    let touchStartX = 0;
+    let touchEndX = 0;
+
+    document.addEventListener("touchstart", function (event) {
+      touchStartX = event.changedTouches[0].screenX;
+    }, { passive: true });
+
+    document.addEventListener("touchend", function (event) {
+      touchEndX = event.changedTouches[0].screenX;
+
+      const swipeDistance = touchEndX - touchStartX;
+
+      if (swipeDistance < -60) {
+        changePage(1);
+      }
+
+      if (swipeDistance > 60) {
+        changePage(-1);
+      }
+    }, { passive: true });
 
     showPage();
   </script>
+
 </body>
 </html>
