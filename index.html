@@ -1,18 +1,112 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>교육 참석자 안내</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>교육 참석자 안내</title>
+
+  <style>
+    body {
+      margin: 0;
+      padding: 20px 12px;
+      font-family: sans-serif;
+      text-align: center;
+      background: #f5f5f5;
+    }
+
+    h2 {
+      margin: 0 0 16px;
+    }
+
+    .page-image {
+      display: none;
+      width: 100%;
+      max-width: 900px;
+      height: auto;
+      margin: 0 auto;
+      background: white;
+    }
+
+    .page-image.active {
+      display: block;
+    }
+
+    .page-number {
+      margin: 14px 0 10px;
+      font-weight: bold;
+    }
+
+    .buttons {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+    }
+
+    button {
+      min-width: 110px;
+      padding: 12px 18px;
+      border: 0;
+      border-radius: 8px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    button:disabled {
+      opacity: 0.4;
+      cursor: default;
+    }
+  </style>
 </head>
 
-<body style="text-align:center; font-family:sans-serif; margin:0;">
+<body>
+  <h2>주차 및 건물 출입 안내</h2>
 
-<img src="주차 및 건물 출입 안내001.jpg"
-     style="width:100%; max-width:900px; display:block; margin:auto;">
+  <img
+    class="page-image active"
+    src="주차 및 건물 출입 안내001.jpg"
+    alt="주차 및 건물 출입 안내 1페이지"
+  >
 
-<img src="주차 및 건물 출입 안내002.jpg"
-     style="width:100%; max-width:900px; display:block; margin:auto;">
+  <img
+    class="page-image"
+    src="주차 및 건물 출입 안내002.jpg"
+    alt="주차 및 건물 출입 안내 2페이지"
+  >
 
+  <div class="page-number">
+    <span id="currentPage">1</span> / 2페이지
+  </div>
+
+  <div class="buttons">
+    <button id="prevButton" onclick="changePage(-1)">이전 페이지</button>
+    <button id="nextButton" onclick="changePage(1)">다음 페이지</button>
+  </div>
+
+  <script>
+    const pages = document.querySelectorAll(".page-image");
+    const currentPageText = document.getElementById("currentPage");
+    const prevButton = document.getElementById("prevButton");
+    const nextButton = document.getElementById("nextButton");
+
+    let currentPage = 0;
+
+    function showPage() {
+      pages.forEach((page, index) => {
+        page.classList.toggle("active", index === currentPage);
+      });
+
+      currentPageText.textContent = currentPage + 1;
+      prevButton.disabled = currentPage === 0;
+      nextButton.disabled = currentPage === pages.length - 1;
+    }
+
+    function changePage(direction) {
+      currentPage += direction;
+      showPage();
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    showPage();
+  </script>
 </body>
 </html>
